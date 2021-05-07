@@ -17,6 +17,7 @@ import pandas
 import numpy
 import sys
 from lpsolve55 import *
+import matplotlib.pyplot as plt
 
 numpy.set_printoptions(threshold=sys.maxsize)
 result = pandas.read_csv('C:/Users/Tom/OneDrive/Desktop/cw/TrainingData.txt')
@@ -141,7 +142,7 @@ for i in range(100):
             f = open(fileName,'w')
             #z = open('C:/Users/Tom/OneDrive/Desktop/cw/Tasks2.txt','w')
 
-
+            
             print(T0)
 
             f.write('min: a b c d e;')
@@ -297,12 +298,66 @@ for i in range(100):
             print(DBreak )
             print('\n')
             print(EBreak )
-
+            outName = 'LPSolveOut' + str(i) +'.txt'
+            z = open(outName,'w')
+            z.write('User 1 Total cost: '+ str(a))
+            z.write('\n')
+            z.write('User 2 Total cost: '+str(b))
+            z.write('\n')
+            z.write('User 3 Total cost: '+str(c))
+            z.write('\n')
+            z.write('User 4 Total cost: '+str(d))
+            z.write('\n')
+            z.write('User 5 Total cost: '+str(e))
+            z.write('\n')
+            z.write('User 1 Schedule: ')
+            z.write('\n')
+            z.write(str(ABreak))
+            z.write('\n')
+            z.write('User 2 Schedule: ')
+            z.write('\n')
+            z.write(str(BBreak))
+            z.write('\n')
+            z.write('User 3 Schedule: ')
+            z.write('\n')
+            z.write(str(CBreak))
+            z.write('\n')
+            z.write('User 4 Schedule: ')
+            z.write('\n')
+            z.write(str(CBreak))
+            z.write('\n')
+            z.write('User 5 Schedule: ')
+            z.write('\n')
+            z.write(str(EBreak))
+            
               
             lpsolve('delete_lp',lp)
 
+            BStart = []
+            Bars = []
+            for x in range(24):
+               
+                BStart.append(x+1)
+                Bars.append(float(test1.iloc[i,x])*(float(ABreak[x]+BBreak[x]+CBreak[x]+DBreak[x]+EBreak[x])))
+            plt.bar(BStart,Bars,tick_label = BStart, width = 0.4, color = ['red','blue'])
+            plt.xlabel('Hour')
+            plt.ylabel('Community Cost')
+            plt.title('A chart to show total cost to the community using price ' + str(i))
+            plt.savefig('Chart for price' + str(i) +'.png')
+            plt.close()
+            z.write('\n')
+            z.write('Bars:' + str(Bars))
+            Bars.clear()
+            BStart.clear()
 
+            CBreak.clear()
+            ABreak.clear()
+            BBreak.clear()
+            DBreak.clear()
+            EBreak.clear()
 test1.to_csv('labelledData.csv',sep='\t')
+z.close()
+
     #z.close()
 
 
